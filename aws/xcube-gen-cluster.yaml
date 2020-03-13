@@ -1,0 +1,15 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: dcfs-xcube-gen-cluster
+  region: eu-central-1
+
+nodeGroups:
+  - name: dcfs-xcube-gen-cluster-nodegroup1
+    instanceType: m5.large
+    desiredCapacity: 4
+    taints:
+      feaster: "true:NoSchedule"
+    ssh:
+      allow: true # will use ~/.ssh/id_rsa.pub as the default ssh key

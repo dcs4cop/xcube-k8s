@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+
+kind: RoleBinding
+metadata:
+  name: xcube-gen
+  namespace: xcube-gen
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: xcube-gen
+    # apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role #this must be Role or ClusterRole
+  name: xcube-gen # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io

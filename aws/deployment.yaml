@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "xcube-gen"
+  namespace: "xcube-gen"
+spec:
+  selector:
+    matchLabels:
+      app: "xcube-gen"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "xcube-gen"
+    spec:
+      containers:
+        - image: quay.io/bcdev/xcube-gen@sha256:1c3f71a544c0800bd6a309587108e4b58c8609755bd641f896a71b7f50814576
+          imagePullPolicy: Always
+          name: "xcube-gen"
+          ports:
+            - containerPort: 8000
