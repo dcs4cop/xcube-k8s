@@ -14,7 +14,7 @@ spec:
         app: "xcube-gen"
     spec:
       containers:
-        - image: quay.io/bcdev/xcube-gen@sha256:1c3f71a544c0800bd6a309587108e4b58c8609755bd641f896a71b7f50814576
+        - image: quay.io/bcdev/xcube-gen@sha256:2be58f28fde5d2e634484a19aed4718187347738b616a3dcbad6a17e05f1d7d8
           imagePullPolicy: Always
           name: "xcube-gen"
           ports:
