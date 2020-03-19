@@ -1,9 +1,0 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  namespace: xcube-gen
-  name: xcube-gen
-rules:
-  - apiGroups: [""] # "" indicates the core API group
-    resources: ["jobs", "jobs.batch", "batch"]
-    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]

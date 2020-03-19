@@ -14,7 +14,14 @@ spec:
         app: "xcube-gen"
     spec:
       containers:
-        - image: quay.io/bcdev/xcube-gen@sha256:2be58f28fde5d2e634484a19aed4718187347738b616a3dcbad6a17e05f1d7d8
+        - image: quay.io/bcdev/xcube-gen@sha256:4816fbff118e135de308606551b67b5fe9f9196f047112962d7fdb5e72b100b6
+          env:
+            - name: SH_CLIENT_ID
+              value: c523d6d6-e43a-4b2c-9b3c-5fd179223d50
+            - name: SH_CLIENT_SECRET
+              value: j5jDeDhSWCBEyikj6ooq
+            - name: SH_INSTANCE_ID
+              value: c5828fc7-aa47-4f1d-b684-ae596521ef25
           imagePullPolicy: Always
           name: "xcube-gen"
           ports:
