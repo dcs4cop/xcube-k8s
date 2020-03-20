@@ -5,8 +5,16 @@
 replicaCount: 1
 
 image:
+  dev: false
+  dev_img: quay.io/bcdev/xcube-gen
   repository: quay.io/bcdev/xcube-gen
   pullPolicy: IfNotPresent
+  env:
+    sh_client_id: 
+    sh_client_secret: 
+    sh_instance_id: 
+    xcube_sh_docker_img: quay.io/bcdev/xcube-sh
+    k8s_namespace: xcube-gen
 
 imagePullSecrets: []
 nameOverride: ""
@@ -36,7 +44,7 @@ container:
   port: 8000
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 8000
 
 ingress:
@@ -56,7 +64,7 @@ ingress:
   #      - chart-example.local
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
+  # We usuallyvalues-dev recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.

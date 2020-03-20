@@ -25,7 +25,24 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
+          {{ if .Values.image.dev }}
+          image: "{{ .Values.image.dev_img }}"
+          {{ else }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          {{ end }}
+          env:
+            - name: SH_CLIENT_ID
+              value: {{.Values.image.env.sh_client_id}}
+            - name: SH_CLIENT_SECRET
+              value: {{.Values.image.env.sh_client_secret}}
+            - name: SH_INSTANCE_ID
+              value: {{.Values.image.env.sh_instance_id}}
+            - name: XCUBE_SH_DOCKER_IMG
+              value: {{.Values.image.env.xcube_sh_docker_img}}
+            - name: K8S_NAMESPACE
+              value: {{.Values.image.env.k8s_namespace}}
+            - name: K8S_PROCESSS_NAMESPACE
+              value: {{.Values.image.env.k8s_namespace}}-process
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

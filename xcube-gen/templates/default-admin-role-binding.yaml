@@ -1,13 +1,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: default-admin
+  name: default-admin-{{.Values.image.env.k8s_namespace}}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: cluster-admin
+  name: cluster-admin-{{.Values.image.env.k8s_namespace}}
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: xcube-gen
+  namespace: {{.Values.image.env.k8s_namespace}}
 
