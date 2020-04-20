@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "xcube-gen.fullname" . }}
+  name: {{ include "xcube-gen.fullname" . }}-{{.Values.uiContainer.name}}
   labels:
     {{- include "xcube-gen.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.uiContainer.replicaCount }}
   selector:
     matchLabels:
       {{- include "xcube-gen.selectorLabels" . | nindent 6 }}
@@ -22,42 +22,34 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ include "xcube-gen.fullname" . }}-{{.Values.uiContainer.name}}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          {{ if .Values.image.dev }}
-          image: "{{ .Values.image.dev_img }}"
+          {{ if .Values.uiContainer.dev }}
+          image: "{{ .Values.uiContainer.dev_img }}"
           {{ else }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.uiContainer.repository }}:{{ .Chart.AppVersion }}"
           {{ end }}
           env:
-            - name: SH_CLIENT_ID
-              value: {{.Values.image.env.sh_client_id}}
-            - name: SH_CLIENT_SECRET
-              value: {{.Values.image.env.sh_client_secret}}
-            - name: SH_INSTANCE_ID
-              value: {{.Values.image.env.sh_instance_id}}
-            - name: XCUBE_SH_DOCKER_IMG
-              value: {{.Values.image.env.xcube_sh_docker_img}}
-            - name: K8S_NAMESPACE
-              value: {{.Values.image.env.k8s_namespace}}
-            - name: K8S_PROCESSS_NAMESPACE
-              value: {{.Values.image.env.k8s_namespace}}-process
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- range .Values.uiContainer.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+          imagePullPolicy: {{ .Values.uiContainer.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{.Values.container.port}}
+              containerPort: {{.Values.uiContainer.port}}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /{{.Values.uiContainer.name}}
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /{{.Values.uiContainer.name}}
               port: http
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.uiContainer.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
