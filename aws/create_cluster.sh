@@ -2,17 +2,17 @@ eksctl create cluster \
 --name xcube-gen \
 --region eu-central-1 \
 --nodegroup-name xcube-gen-workers \
---node-type t3.medium \
+--node-type t3.large \
 --nodes 3 \
 --nodes-min 1 \
 --nodes-max 4 \
 --managed
 
 
-eksctl utils associate-iam-oidc-provider --cluster=xcube-gen --approve
+eksctl utils associate-iam-oidc-provider --cluster=dcfs-xcube-gen --approve
 
 aws iam create-policy \
-  --policy-name ALBIngressControllerIAMPolicyXC \
+  --policy-name ALBIngressControllerIAMPolicy \
   --policy-document https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/iam-policy.json
 
 eksctl create iamserviceaccount \
@@ -24,5 +24,7 @@ eksctl create iamserviceaccount \
   --approve
 
 kubectl apply -f alb-ingress-controller.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.2/docs/examples/rbac-role.yaml
 
 # kubectl create clusterrolebinding default-admin --clusterrole cluster-admin --serviceaccount=xcube-gen:default

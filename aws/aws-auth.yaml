@@ -11,7 +11,7 @@ data:
         - system:bootstrappers
         - system:nodes
   mapUsers: |
-    - userarn: arn:aws:iam::346516713328:user/xcube-gen
-      username: xcube-gen
+    - userarn: arn:aws:iam::346516713328:user/dzelge
+      username: dzelge
       groups:
         - system:masters

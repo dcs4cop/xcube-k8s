@@ -1,3 +1,4 @@
 *.iml
 .idea
 values.yaml
+values-minikube.yaml
