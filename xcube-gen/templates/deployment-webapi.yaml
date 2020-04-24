@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "xcube-gen.fullname" . }}
+  name: {{ include "xcube-gen.fullname" . }}-{{.Values.webapiContainer.name}}
   labels:
     {{- include "xcube-gen.labels" . | nindent 4 }}
 spec:
@@ -31,7 +31,9 @@ spec:
           image: "{{ .Values.webapiContainer.repository }}:{{ .Chart.AppVersion }}"
           {{ end }}
           env:
-            {{- range .Values.webapiContainer.env }}
+            - name: XCUBE_GEN_CHART_VERSION
+              value: {{.Chart.Version}}
+        {{- range .Values.webapiContainer.env }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}

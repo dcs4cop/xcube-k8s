@@ -25,11 +25,7 @@ spec:
         - name: {{ include "xcube-gen.fullname" . }}-{{.Values.uiContainer.name}}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          {{ if .Values.uiContainer.dev }}
-          image: "{{ .Values.uiContainer.dev_img }}"
-          {{ else }}
           image: "{{ .Values.uiContainer.repository }}:{{ .Chart.AppVersion }}"
-          {{ end }}
           env:
             {{- range .Values.uiContainer.env }}
             - name: {{ .name }}
