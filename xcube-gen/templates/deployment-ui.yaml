@@ -38,11 +38,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /{{.Values.uiContainer.name}}
+              path: /
               port: http
           readinessProbe:
             httpGet:
-              path: /{{.Values.uiContainer.name}}
+              path: /
               port: http
           resources:
             {{- toYaml .Values.uiContainer.resources | nindent 12 }}
