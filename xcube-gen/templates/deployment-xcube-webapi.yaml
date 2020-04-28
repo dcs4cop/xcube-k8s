@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "xcube-gen.fullname" . }}-{{.Values.webapiContainer.name}}
+  name: {{ include "xcube-gen.fullname" . }}-{{.Values.xcubeContainer.name}}
   labels:
     {{- include "xcube-gen.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.webapiContainer.replicaCount }}
+  replicas: {{ .Values.xcubeContainer.replicaCount }}
   selector:
     matchLabels:
       {{- include "xcube-gen.selectorLabels" . | nindent 6 }}
@@ -22,21 +22,21 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Values.webapiContainer.name }}
+        - name: {{ .Values.xcubeContainer.name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.webapiContainer.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.xcubeContainer.repository }}"
           env:
             - name: XCUBE_GEN_CHART_VERSION
               value: {{.Chart.Version}}
-        {{- range .Values.webapiContainer.env }}
+        {{- range .Values.xcubeContainer.env }}
             - name: {{ .name }}
               value: '{{ .value }}'
         {{- end }}
-          imagePullPolicy: {{ .Values.webapiContainer.pullPolicy }}
+          imagePullPolicy: {{ .Values.xcubeContainer.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{.Values.webapiContainer.port}}
+              containerPort: {{.Values.xcubeContainer.port}}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -47,7 +47,7 @@ spec:
               path: /
               port: http
           resources:
-            {{- toYaml .Values.webapiContainer.resources | nindent 12 }}
+            {{- toYaml .Values.xcubeContainer.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

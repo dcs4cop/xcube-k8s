@@ -32,3 +32,22 @@ spec:
   selector:
   {{- include "xcube-gen.selectorLabels" . | nindent 4 }}
 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "xcube-gen.fullname" . }}-{{ .Values.xcubeContainer.name }}
+  labels:
+  {{- include "xcube-gen.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.xcubeContainer.port }}
+      targetPort: {{ .Values.xcubeContainer.port }}
+      protocol: TCP
+      name: http
+  selector:
+  {{- include "xcube-gen.selectorLabels" . | nindent 4 }}
+

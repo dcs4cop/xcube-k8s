@@ -12,3 +12,11 @@ eksctl create cluster -f xcube-gen-cluster.yaml
 kubectl apply -f deploy-tls-termination.yaml
 ```
 
+Sei:
+   <cube> := Cube in einem Bucket + Credentials
+
+Dann:
+   1. <server-url> := Spawn "xcube serve <cube>" 
+   2. <viewer-url> := "https://xcube-gen/..../viewer?server=<server-url>"
+
+
