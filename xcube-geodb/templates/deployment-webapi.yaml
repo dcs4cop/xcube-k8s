@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "xcube-gen.fullname" . }}-{{.Values.xcubeContainer.name}}
+  name: {{ include "xcube-gen.fullname" . }}-{{.Values.webapiContainer.name}}
   labels:
     {{- include "xcube-gen.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.xcubeContainer.replicaCount }}
+  replicas: {{ .Values.webapiContainer.replicaCount }}
   selector:
     matchLabels:
       {{- include "xcube-gen.selectorLabels" . | nindent 6 }}
@@ -22,32 +22,41 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Values.xcubeContainer.name }}
+        - name: {{ .Values.webapiContainer.name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.xcubeContainer.repository }}"
+          image: "{{ .Values.webapiContainer.repository }}"
           env:
             - name: XCUBE_GEN_CHART_VERSION
               value: {{.Chart.Version}}
-        {{- range .Values.xcubeContainer.env }}
+        {{- range .Values.webapiContainer.env }}
             - name: {{ .name }}
               value: '{{ .value }}'
         {{- end }}
-          imagePullPolicy: {{ .Values.xcubeContainer.pullPolicy }}
+          imagePullPolicy: {{ .Values.webapiContainer.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{.Values.xcubeContainer.port}}
+              containerPort: {{.Values.webapiContainer.port}}
+              protocol: TCP
+            - name: debug
+              containerPort: 8003
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /
               port: http
+              httpHeaders:
+                - name: access
+                  value: liveness
           readinessProbe:
             httpGet:
               path: /
               port: http
+              httpHeaders:
+                - name: access
+                  value: liveness
           resources:
-            {{- toYaml .Values.xcubeContainer.resources | nindent 12 }}
+            {{- toYaml .Values.webapiContainer.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -25,7 +25,7 @@ spec:
         - name: {{ .Values.webapiContainer.name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.webapiContainer.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.webapiContainer.repository }}"
           env:
             - name: XCUBE_GEN_CHART_VERSION
               value: {{.Chart.Version}}
@@ -37,6 +37,9 @@ spec:
           ports:
             - name: http
               containerPort: {{.Values.webapiContainer.port}}
+              protocol: TCP
+            - name: debug
+              containerPort: 8003
               protocol: TCP
           livenessProbe:
             httpGet:
