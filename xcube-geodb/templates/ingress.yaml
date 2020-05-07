@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "xcube-gen.fullname" . -}}
+{{- $fullName := include "xcube-geodb.fullname" . -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
@@ -9,7 +9,7 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "xcube-gen.labels" . | nindent 4 }}
+    {{- include "xcube-geodb.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -33,7 +33,7 @@ spec:
         {{- range .paths }}
           - path: {{ .path }}
             backend:
-              serviceName: {{ $fullName }}-{{.serviceNameSuffix}}
+              serviceName: {{.serviceNameSuffix}}-service
               servicePort: {{ .servicePort }}
         {{- end }}
   {{- end }}

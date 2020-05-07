@@ -1,17 +1,26 @@
-apiVersion: v1
-kind: Pod
-metadata:
-  name: "{{ include "xcube-gen.fullname" . }}-test-connection"
-  labels:
-    {{- include "xcube-gen.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook": test-success
-spec:
-  containers:
-    - name: wget
-      image: busybox
-      command: ['wget']
-      args: [
-        '{{ include "xcube-gen.fullname" . }}:{{ .Values.webapiContainer.port }}',
-      ]
-  restartPolicy: Never
+{{/*{{ $values := .Values }}*/}}
+{{/*{{ $chart := .Chart }}*/}}
+{{/*{{ $root := . }}*/}}
+
+{{/*{{ range $i, $deployment := .Values.deployments }}*/}}
+{{/*apiVersion: v1*/}}
+{{/*kind: Pod*/}}
+{{/*metadata:*/}}
+{{/*  name: {{ $deployment.name }}-test-connection*/}}
+{{/*  labels:*/}}
+{{/*    {{ $deployment.name }}*/}}
+{{/*    '{{ include "xcube-geodb.labels" $root | nindent 4 }}'*/}}
+{{/*  annotations:*/}}
+{{/*    "helm.sh/hook": test-success*/}}
+{{/*spec:*/}}
+{{/*  containers:*/}}
+{{/*    - name: wget*/}}
+{{/*      image: busybox*/}}
+{{/*      command: ['wget']*/}}
+{{/*      args: [*/}}
+{{/*        '{{ include "xcube-geodb.fullname" $root }}:{{ $deployment.port }}',*/}}
+{{/*      ]*/}}
+{{/*  restartPolicy: Never*/}}
+
+{{/*---*/}}
+{{/*{{ end }}*/}}
