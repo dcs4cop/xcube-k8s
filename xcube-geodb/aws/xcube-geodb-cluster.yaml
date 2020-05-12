@@ -2,12 +2,12 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: xcube-gen
+  name: xcube-geodb
   region: eu-central-1
 
 nodeGroups:
-  - name: xcube-gen-workers
+  - name: xcube-geodb-workers
     instanceType: t3.large
-    desiredCapacity: 2
+    desiredCapacity: 3
     ssh:
       allow: true # will use ~/.ssh/id_rsa.pub as the default ssh key

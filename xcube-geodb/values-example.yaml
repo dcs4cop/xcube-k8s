@@ -41,23 +41,15 @@ service:
 
 
 webapiContainer:
-  name: webapi
-  repository: quay.io/bcdev/xcube-gen
+  name: postgrest
+  repository: postgrest/postgrest
   pullPolicy: IfNotPresent # Use Always for development
-  port: 8000
+  port: 3000
   replicaCount: 2
   resources: {}
   env:
-    - name: SH_CLIENT_ID
-      value: ''
-    - name: SH_CLIENT_SECRET
-      value: ''
-    - name: SH_INSTANCE_ID
-      value: ''
-    - name: XCUBE_SH_DOCKER_IMG
-      value: quay.io/bcdev/xcube-sh
     - name: K8S_NAMESPACE
-      value: xcube-gen
+      value: xcube-geodb
 
 uiContainer:
   name: ui
