@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "xcube-gen.fullname" . }}-{{.Values.redisContainer.name}}
+  labels:
+  {{- include "xcube-gen.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.redisContainer.replicaCount }}
+  selector:
+    matchLabels:
+  {{- include "xcube-gen.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+    {{- include "xcube-gen.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "xcube-gen.serviceAccountName" . }}
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Values.redisContainer.name }}
+          securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.redisContainer.repository }}"
+          env:
+            - name: XCUBE_GEN_CHART_VERSION
+              value: {{.Chart.Version}}
+            {{- range .Values.redisContainer.env }}
+            - name: {{ .name }}
+              value: '{{ .value }}'
+            {{- end }}
+          imagePullPolicy: {{ .Values.redisContainer.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{.Values.redisContainer.port}}
+              protocol: TCP
+          {{/*          livenessProbe:*/}}
+          {{/*            httpGet:*/}}
+          {{/*              path: /*/}}
+          {{/*              port: http*/}}
+          {{/*          readinessProbe:*/}}
+          {{/*            httpGet:*/}}
+          {{/*              path: /*/}}
+          {{/*              port: http*/}}
+          resources:
+      {{- toYaml .Values.redisContainer.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
