@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "xcube-gen.fullname" . }}-{{.Values.webapiContainer.name}}
+  labels:
+    {{- include "xcube-gen.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.webapiContainer.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "xcube-gen.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{ if .Values.webapiContainer.rollme }}
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      {{ end }}
+      labels:
+        {{- include "xcube-gen.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "xcube-gen.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Values.webapiContainer.name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.webapiContainer.repository }}:{{ .Chart.AppVersion }}"
+          env:
+            - name: XCUBE_GEN_CHART_VERSION
+              value: {{.Chart.Version}}
+        {{- range .Values.webapiContainer.env }}
+            - name: {{ .name }}
+              value: '{{ .value }}'
+        {{- end }}
+          imagePullPolicy: {{ .Values.webapiContainer.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{.Values.webapiContainer.port}}
+              protocol: TCP
+            - name: debug
+              containerPort: 8003
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.webapiContainer.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "xcube-gen.fullname" . }}-{{ .Values.webapiContainer.name }}
+  labels:
+  {{- include "xcube-gen.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.webapiContainer.port }}
+      targetPort: {{ .Values.webapiContainer.port }}
+      protocol: TCP
+      name: http
+    - port: 8003
+      targetPort: 8003
+      protocol: TCP
+      name: debug
+  selector:
+  {{- include "xcube-gen.selectorLabels" . | nindent 4 }}

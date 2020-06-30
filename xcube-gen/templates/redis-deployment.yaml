@@ -1,3 +1,17 @@
+{{ if .Values.redisContainer.spawn }}
+
+apiVersion: v1
+data:
+  redis-config: |
+    {{- range .Values.redisContainer.config }}
+    {{ .name }} {{ .value }}
+  {{- end }}
+kind: ConfigMap
+metadata:
+  name: xcube-gen-redis-config
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,6 +40,9 @@ spec:
           securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.redisContainer.repository }}"
+          command:
+            - redis-server
+            - "/redis-master/redis.conf"
           env:
             - name: XCUBE_GEN_CHART_VERSION
               value: {{.Chart.Version}}
@@ -33,21 +50,39 @@ spec:
             - name: {{ .name }}
               value: '{{ .value }}'
             {{- end }}
+            - name: MASTER
+              value: "true"
           imagePullPolicy: {{ .Values.redisContainer.pullPolicy }}
           ports:
             - name: http
               containerPort: {{.Values.redisContainer.port}}
               protocol: TCP
-          {{/*          livenessProbe:*/}}
-          {{/*            httpGet:*/}}
-          {{/*              path: /*/}}
-          {{/*              port: http*/}}
-          {{/*          readinessProbe:*/}}
-          {{/*            httpGet:*/}}
-          {{/*              path: /*/}}
-          {{/*              port: http*/}}
+          volumeMounts:
+          - mountPath: /redis-master-data
+            name: data
+          - mountPath: /redis-master
+            name: config
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
           resources:
-      {{- toYaml .Values.redisContainer.resources | nindent 12 }}
+            {{- toYaml .Values.redisContainer.resources | nindent 12 }}
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: xcube-gen-redis-config
+            items:
+              - key: redis-config
+                path: redis.conf
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
@@ -60,3 +95,23 @@ spec:
       tolerations:
     {{- toYaml . | nindent 8 }}
   {{- end }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "xcube-gen.fullname" . }}-{{ .Values.redisContainer.name }}
+  labels:
+  {{- include "xcube-gen.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.redisContainer.port }}
+      targetPort: {{ .Values.redisContainer.port }}
+      protocol: TCP
+      name: http
+  selector:
+  {{- include "xcube-gen.selectorLabels" . | nindent 4 }}
+
+ {{ end }}
