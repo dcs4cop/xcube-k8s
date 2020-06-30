@@ -1,0 +1,44 @@
+{{ $values := .Values }}
+{{ $chart := .Chart }}
+{{ $root := . }}
+
+{{ range $i, $deployment := .Values.webservices }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $deployment.name }}-service
+  labels:
+    {{- include "xcube-geodb.labels" $root | nindent 4 }}
+spec:
+  type: {{ $values.service.type }}
+  ports:
+    - port: {{ $deployment.port }}
+      targetPort: {{ $deployment.port }}
+      protocol: TCP
+      name: http
+  selector:
+  {{- include "xcube-geodb.selectorLabels" $root | nindent 4 }}
+
+---
+{{ end }}
+
+{{ range $i, $deployment := .Values.databases }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $deployment.name }}-service
+  labels:
+  {{- include "xcube-geodb.labels" $root | nindent 4 }}
+spec:
+  type: {{ $values.service.type }}
+  ports:
+    - port: {{ $deployment.port }}
+      targetPort: {{ $deployment.port }}
+      protocol: TCP
+      name: http
+  selector:
+  {{- include "xcube-geodb.selectorLabels" $root | nindent 4 }}
+
+---
+
+{{ end }}

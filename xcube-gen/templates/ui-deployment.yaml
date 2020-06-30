@@ -11,6 +11,10 @@ spec:
       {{- include "xcube-gen.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{ if .Values.uiContainer.rollme }}
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      {{ end }}
       labels:
         {{- include "xcube-gen.selectorLabels" . | nindent 8 }}
     spec:
@@ -25,11 +29,7 @@ spec:
         - name: {{ include "xcube-gen.fullname" . }}-{{.Values.uiContainer.name}}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          {{ if .Values.uiContainer.dev }}
-          image: "{{ .Values.uiContainer.dev_img }}"
-          {{ else }}
           image: "{{ .Values.uiContainer.repository }}:{{ .Chart.AppVersion }}"
-          {{ end }}
           env:
             {{- range .Values.uiContainer.env }}
             - name: {{ .name }}
@@ -42,11 +42,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /{{.Values.uiContainer.name}}
+              path: /
               port: http
           readinessProbe:
             httpGet:
-              path: /{{.Values.uiContainer.name}}
+              path: /
               port: http
           resources:
             {{- toYaml .Values.uiContainer.resources | nindent 12 }}
@@ -62,3 +62,21 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "xcube-gen.fullname" . }}-{{ .Values.uiContainer.name }}
+  labels:
+  {{- include "xcube-gen.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.uiContainer.port }}
+      targetPort: {{ .Values.uiContainer.port }}
+      protocol: TCP
+      name: http
+  selector:
+  {{- include "xcube-gen.selectorLabels" . | nindent 4 }}

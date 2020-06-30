@@ -11,5 +11,8 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "xcube-gen.fullname" . }}:{{ .Values.webapiContainer.port }}']
+      args: [
+        '{{ include "xcube-gen.fullname" . }}:{{ .Values.webapiContainer.port }}',
+        '{{ include "xcube-gen.fullname" . }}:{{ .Values.uiContainer.port }}'
+      ]
   restartPolicy: Never
