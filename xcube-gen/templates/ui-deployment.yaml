@@ -29,7 +29,7 @@ spec:
         - name: {{ include "xcube-gen.fullname" . }}-{{.Values.uiContainer.name}}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.uiContainer.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.uiContainer.repository }}:{{ .Values.uiContainer.tag }}"
           env:
             {{- range .Values.uiContainer.env }}
             - name: {{ .name }}

@@ -1,11 +1,11 @@
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: xcube-gen
+  name: {{ include "xcube-gen.serviceAccountName" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "xcube-gen.serviceAccountName" . }}
-    namespace: xcube-gen
+    namespace: {{ .Values.webapiContainer.namespace }}
 roleRef:
   kind: ClusterRole
   name: cluster-admin

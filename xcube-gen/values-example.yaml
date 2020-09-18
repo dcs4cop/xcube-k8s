@@ -6,6 +6,12 @@
 ## GLOBAL
 ##############################################
 
+default:
+  - &xcube-gen-host xcube-gen.brockmann-consult.de
+  - &xcube-gen-host-url https://xcube-gen.brockmann-consult.de
+  - &xcube-gen-host-api-url https://xcube-gen.brockmann-consult.de/api/v1
+  - &xcube-gen-namespace
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -27,7 +33,7 @@ securityContext: {}
   #   drop:
   #   - ALL
   # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
+# runAsNonRoot: true
 # runAsUser: 1000
 
 nodeSelector: {}
@@ -42,10 +48,13 @@ service:
 
 webapiContainer:
   name: webapi
-  repository: quay.io/bcdev/xcube-gen
-  pullPolicy: IfNotPresent # Use Always for development
+  namespace: *xcube-gen-namespace
+  repository: quay.io/bcdev/xcube-gen-api
+  tag: 1.0.8.dev4
+  pullPolicy: Always # Use Always for development
   port: 8000
-  replicaCount: 2
+  replicaCount: 1
+  rollme: 1
   resources: {}
   env:
     - name: SH_CLIENT_ID
@@ -54,21 +63,67 @@ webapiContainer:
       value: ''
     - name: SH_INSTANCE_ID
       value: ''
-    - name: XCUBE_SH_DOCKER_IMG
-      value: quay.io/bcdev/xcube-sh
+    - name: AWS_ACCESS_KEY_ID
+      value: ''
+    - name: AWS_SECRET_ACCESS_KEY
+      value: ''
+    - name: XCUBE_DOCKER_IMG
+      value: quay.io/bcdev/xcube-gen:0.5.4
+    - name: XCUBE_DOCKER_WEBAPI_IMG
+      value: quay.io/bcdev/xcube-gen:0.5.4
+    - name: XCUBE_GEN_DOCKER_PULL_POLICY
+      value: Always
+    - name: XCUBE_GEN_CACHE_PROVIDER
+      value: leveldb
+    - name: XCUBE_GEN_REDIS_HOST
+      value: xcube-gen-redis
+    - name: XCUBE_WEBAPI_URI
+      value: *xcube-gen-host-url
+    - name: XCUBE_VIEWER_PATH
+      value: '/api/v1/viewer'
+    - name: XCUBE_GEN_API_CALLBACK_URL
+      value: *xcube-gen-host-api-url
+    #    - name: XCUBE_GEN_DEBUG_HOST
+    #      value: 172.17.0.1
     - name: K8S_NAMESPACE
-      value: xcube-gen
+      value: *xcube-gen-namespace
+
 
 uiContainer:
   name: ui
+  create: true
   repository: quay.io/bcdev/xcube-gen-ui
-  pullPolicy: IfNotPresent # Use Always for development
-  port: 5000
-  replicaCount: 2
+  tag: 1.0.8
+  # pullPolicy: IfNotPresent # Use Always for development
+  pullPolicy: Always # Use Always for development
+  port: 80
+  replicaCount: 1
+  resources: {}
+  rollme: 0
+  env:
+    - name: K8S_NAMESPACE
+      value: xcube-gen
+    - name: REACT_APP_API_SERVER_URL
+      value: *xcube-gen-host-url
+
+redisContainer:
+  spawn: false
+  name: redis
+  repository: redis
+  # pullPolicy: IfNotPresent # Use Always for development
+  pullPolicy: Always # Use Always for development
+  port: 6379
+  replicaCount: 1
   resources: {}
   env:
     - name: K8S_NAMESPACE
       value: xcube-gen
+  config:
+    - name: bind
+      value: 0.0.0.0
+    - name: maxmemory-policy
+      value: allkeys-lru
+
 
 
 ##############################################
@@ -80,13 +135,12 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
   hosts:
-    - host: xcube-gen.brockmann-consult.de
+    - host: *xcube-gen-host
       paths:
         - path: /api/v1/(.*)
           servicePort: 8000
           serviceNameSuffix: 'webapi'
         - path: /(.*)
-          servicePort: 5000
+          servicePort: 80
           serviceNameSuffix: 'ui'
   tls: []
-
