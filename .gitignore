@@ -2,3 +2,6 @@
 .idea
 values.yaml
 values-minikube.yaml
+/charts/
+/xcube-gen/values-dev.yaml
+/xcube-gen/values-stage.yaml
