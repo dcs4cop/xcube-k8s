@@ -9,8 +9,8 @@ entries:
       sources:
         - https://github.com//dcs4cop/xcube
       urls:
-        - https://dcfs-xcube-charts.s3.eu-central-1.amazonaws.com/charts/xcube-gen-0.5.0.tgz
-      version: 0.5.0
+        - https://dcfs-xcube-charts.s3.eu-central-1.amazonaws.com/charts/xcube-gen-1.0.0.tgz
+      version: 1.0.0
   xcube-geodb:
     - created: "2020-09-22T20:16:59.139639398Z"
       description: "Deploy a K8s xcube geodb infrastructure for teh xcube geodb version 0.1"
