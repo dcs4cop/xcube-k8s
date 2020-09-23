@@ -5,3 +5,4 @@ values-minikube.yaml
 /xcube-gen/values-dev.yaml
 /xcube-gen/values-stage.yaml
 /xcube-geodb/values-stage.yaml
+/charts/
