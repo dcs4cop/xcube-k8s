@@ -1,4 +1,4 @@
-
+{{ if eq .Values.tlsTermination.deploymentTarget "AWS" }}
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -41,7 +41,7 @@ data:
       listen 2443;
       return 308 https://$host$request_uri;
     }
-  proxy-real-ip-cidr: 192.168.0.0/16
+  proxy-real-ip-cidr: .Values.tlsTermination.proxyRealIpCidr
   use-forwarded-headers: 'true'
 ---
 # Source: ingress-nginx/templates/clusterrole.yaml
@@ -269,7 +269,7 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
     service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '60'
     service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-central-1:346516713328:certificate/ac3c965b-b28e-4339-972c-9da370a08c24
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: {{ .Values.tlsTermination.awsLoadBalancerSslCert }}
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
     service.beta.kubernetes.io/aws-load-balancer-type: elb
   labels:
@@ -352,7 +352,8 @@ spec:
               add:
                 - NET_BIND_SERVICE
             runAsUser: 101
-            allowPrivilegeEscalation: true
+            # changed
+            allowPrivilegeEscalation: false
           env:
             - name: POD_NAME
               valueFrom:
@@ -647,3 +648,5 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: admission-webhook
   namespace: ingress-nginx
+
+{{ end }}

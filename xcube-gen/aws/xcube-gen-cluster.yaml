@@ -6,8 +6,8 @@ metadata:
   region: eu-central-1
 
 nodeGroups:
-  - name: xcube-gen-workers
-    instanceType: t3.large
+  - name: xcube-gen-workers-xlarge
+    instanceType: t3.xlarge
     desiredCapacity: 2
     ssh:
       allow: true # will use ~/.ssh/id_rsa.pub as the default ssh key

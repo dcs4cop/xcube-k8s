@@ -5,5 +5,9 @@ After that run
 
 ```bash
 kubectl create namespace xcube-gen
+kubectl create -n xcube-geodb secret generic postgrest --from-file=postgrest.conf
+kubectl create -n xcube-geodb secret generic postgrest-eodash --from-file=postgrest-eodash.conf=postgrest.conf
+
 helm upgrade --install -n xcube-gen xcube-gen .
 ```
+

@@ -26,11 +26,19 @@ spec:
       serviceAccountName: {{ include "xcube-geodb.serviceAccountName" $root }}
       securityContext:
         {{- toYaml $values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: {{ $deployment.secretName }}-volume
+          secret:
+            secretName: {{ $deployment.secretName }}
       containers:
         - name: {{ $deployment.name }}
           securityContext:
             {{- toYaml $values.securityContext | nindent 12 }}
           image: "{{ $deployment.repository }}"
+          volumeMounts:
+            - name: {{ $deployment.secretName }}-volume
+              mountPath: {{ $deployment.secretMountPath }}
+              readOnly: true
           env:
             - name: XCUBE_GEN_CHART_VERSION
               value: {{ $chart.Version }}

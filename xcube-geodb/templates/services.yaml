@@ -12,10 +12,10 @@ metadata:
 spec:
   type: {{ $values.service.type }}
   ports:
-    - port: {{ $deployment.port }}
+    - port: {{ $deployment.servicePort }}
       targetPort: {{ $deployment.port }}
       protocol: TCP
-      name: http
+      name: http-{{ $deployment.name }}
   selector:
   {{- include "xcube-geodb.selectorLabels" $root | nindent 4 }}
 
