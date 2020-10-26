@@ -3,6 +3,9 @@
 values.yaml
 values-minikube.yaml
 /xcube-gen/values-dev.yaml
-/xcube-gen/values-stage.yaml
+/xcube-geodb/values-stage.yaml
 /xcube-geodb/values-stage.yaml
 /charts/
+/xcube-gen/values-stage.yaml
+/xcube-gen/store_config.json
+/xcube-gen/.cdsapirc

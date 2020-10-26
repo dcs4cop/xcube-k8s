@@ -6,6 +6,9 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "xcube-gen.serviceAccountName" . }}
     namespace: {{ .Values.webapiContainer.namespace }}
+  - kind: ServiceAccount
+    name: default
+    namespace: {{ .Values.webapiContainer.namespace }}
 roleRef:
   kind: ClusterRole
   name: cluster-admin

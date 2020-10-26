@@ -15,3 +15,15 @@ data:
       username: xcube-gen
       groups:
         - system:masters
+    - userarn: arn:aws:iam::346516713328:user/alicja
+      username: alicja
+      groups:
+        - system:masters
+    - userarn: arn:aws:iam::346516713328:user/forman
+      username: forman
+      groups:
+        - system:masters
+    - userarn: arn:aws:iam::346516713328:user/pontus
+      username: pontus
+      groups:
+        - system:masters

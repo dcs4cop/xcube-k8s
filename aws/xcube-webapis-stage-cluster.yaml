@@ -2,12 +2,12 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: xcube-gen-prod
+  name: xcube-webapis-stage
   region: eu-central-1
 
 nodeGroups:
-  - name: xcube-gen-prod-workers-xl
+  - name: xcube-gen-webapis-workers-xlarge
     instanceType: t3.xlarge
-    desiredCapacity: 3
+    desiredCapacity: 2
     ssh:
       allow: true # will use ~/.ssh/id_rsa.pub as the default ssh key

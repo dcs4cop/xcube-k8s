@@ -1,0 +1,63 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Values.crontabContainer.name }}
+spec:
+  schedule: {{ .Values.crontabContainer.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            {{- toYaml .Values.webapiContainer.securityContext | nindent 12 }}
+          volumes:
+            - name: xcube-gen-stores-pv
+              persistentVolumeClaim:
+                claimName: xcube-gen-stores
+          containers:
+            - name: xcube-gen
+              image: {{ .Values.crontabContainer.repository }}
+              volumeMounts:
+                - name: xcube-gen-stores-pv
+                  mountPath: /mnt/data-stores
+                  readOnly: false
+              env:
+              {{- range .Values.crontabContainer.env }}
+                - name: {{ .name }}
+                  value: '{{ .value }}'
+              {{- end }}
+              args:
+                - /bin/bash
+                - -c
+                - source activate xcube && xcube io dump -o /mnt/data-stores/data-stores.json
+          restartPolicy: OnFailure
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xcube-gen-stores-pv
+  annotations:
+    pv.beta.kubernetes.io/gid: "100"
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 0.2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data-stores"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xcube-gen-stores
+spec:
+  resources:
+    requests:
+      storage: 0.2Gi
+  accessModes:
+    - ReadWriteOnce

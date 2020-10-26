@@ -40,7 +40,7 @@ service:
   type: NodePort
 
 
-webapiContainer:
+jupyterContainer:
   name: postgrest
   repository: postgrest/postgrest
   pullPolicy: IfNotPresent # Use Always for development

@@ -50,7 +50,7 @@ service:
   type: NodePort
 
 
-webapiContainer:
+jupyterContainer:
   name: webapi
   namespace: *xcube-gen-namespace
   repository: *webapi-repository

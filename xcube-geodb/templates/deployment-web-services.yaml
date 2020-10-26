@@ -17,6 +17,7 @@ spec:
   template:
     metadata:
       labels:
+        project: dcfs
         {{- include "xcube-geodb.selectorLabels" $root | nindent 8 }}
     spec:
     {{- with $values.imagePullSecrets }}
