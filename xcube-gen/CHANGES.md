@@ -5,3 +5,4 @@
 - Added a xcube- webapis stage cluster config
 - Added a keycloak template
 - Shifted cluster configs from root dir to app dir
+- Fixed persistentVolumeClaim. The correct volume mount does now appear in the xcube-gen webapi container
