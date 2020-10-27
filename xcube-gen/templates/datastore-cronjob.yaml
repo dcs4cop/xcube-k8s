@@ -13,7 +13,7 @@ spec:
           volumes:
             - name: xcube-gen-stores-pv
               persistentVolumeClaim:
-                claimName: xcube-gen-stores
+                claimName: xcube-gen-stores-pv
           containers:
             - name: xcube-gen
               image: {{ .Values.crontabContainer.repository }}
@@ -29,7 +29,7 @@ spec:
               args:
                 - /bin/bash
                 - -c
-                - source activate xcube && xcube io dump -o /mnt/data-stores/data-stores.json
+                - echo "Start" && source activate xcube && xcube io dump -o /mnt/data-stores/data-stores.json && echo "End"
           restartPolicy: OnFailure
 
 ---
@@ -54,7 +54,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: xcube-gen-stores
+  name: xcube-gen-stores-pv
 spec:
   resources:
     requests:
