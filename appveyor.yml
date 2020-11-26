@@ -23,14 +23,15 @@ test_script:
   - sh: cd ..
   - sh: ls -al charts
 
+
 deploy:
-  provider: S3
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  set_public: true
-  set_content_type: true
-  artifacts: charts/xcube-gen-1.0.2.tgz
-  folder: charts
-  bucket: "dcfs-xcube-charts"
-  region: "eu-central-1"
+  - provider: S3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    set_public: true
+    set_content_type: true
+    artifacts: charts/xcube-gen-1.0.2.tgz
+    folder: charts
+    bucket: "dcfs-xcube-charts"
+    region: "eu-central-1"
 
