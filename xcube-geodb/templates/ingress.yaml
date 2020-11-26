@@ -33,7 +33,7 @@ spec:
         {{- range .paths }}
           - path: {{ .path }}
             backend:
-              serviceName: {{.serviceNameSuffix}}-service
+              serviceName: svc-{{.serviceNameSuffix}}
               servicePort: {{ .servicePort }}
         {{- end }}
   {{- end }}

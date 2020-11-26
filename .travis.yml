@@ -1,14 +1,18 @@
+sudo: required
 language: bash
 
 os:
   - linux
 
-before_script:
+install:
+  - sudo apt-get -y update;
+  - sudo apt-get install  -y conntrack;
   - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
 script:
   - cd xcube-gen
   - helm dependencies update
+  - helm lint . -f tests/test-values.yaml
   - helm package -d ../charts .
   - cd ..
   - cd xcube-geodb

@@ -40,7 +40,7 @@ spec:
         {{ end }}
           imagePullPolicy: {{ $deployment.pullPolicy }}
           ports:
-            - name: http
+            - name: svc-{{ $deployment.name }}
               containerPort: {{ $deployment.port }}
               protocol: TCP
         {{ if $deployment.probes }}

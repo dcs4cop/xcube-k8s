@@ -13,8 +13,10 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 0.1.4
+version: "0.1.5"
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 0.1
+appVersion: "0.1"
+
+icon: https://xcube-gen.brockmann-consult.de/static/media/logo.18f7cee2.png

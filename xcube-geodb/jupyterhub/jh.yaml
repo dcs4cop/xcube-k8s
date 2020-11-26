@@ -1,0 +1,60 @@
+singleuser:
+  defaultUrl: "/lab"
+  image: 
+    name: quay.io/bcdev/xcube-geodb-lab
+    tag: dzelge_v0.1.11
+  extraEnv:
+    GEODB_AUTH_CLIENT_ID: vupdris7m55340ILgtYv78pKfSVM4HxM
+    GEODB_AUTH_CLIENT_SECRET: CRwtD0RN-c8xAK_q-eHrTFODH59bpkhDA92LILfXoCcevA31dJ8aKWymOvfKpvjL
+    GEODB_AUTH_MODE: client-credentials
+  lifecycleHooks:
+    postStart:
+      exec:
+        command: [ "cp", "-r", "/tmp/xcube-geodb/notebooks", "/home/jovyan" ]
+
+envs_dirs:
+  - /home/jovyan/my-conda-envs/
+
+hub:
+  extraEnv:
+    AUTH0_SUBDOMAIN: 'edc.eu'
+  extraConfig:
+    myConfig.py: |
+      c.JupyterHub.authenticator_class = 'oauthenticator.auth0.Auth0OAuthenticator'
+      c.Auth0OAuthenticator.client_id = 'ninOpu3YNSzim5vvyiUGcdW2b06tWT23'
+      c.Auth0OAuthenticator.auth0_subdomain = 'edc.eu'
+      c.Auth0OAuthenticator.client_secret = '2dadVSKkY_TO0JWFZuvVGTUSG7QbAMLsMr-PPBabLlbO0l-xirlC4iL2q2OiwzmV'
+      c.Auth0OAuthenticator.oauth_callback_url = 'https://stage-lab.xcube-geodb.brockmann-consult.de/hub/oauth_callback'
+      c.Auth0OAuthenticator.scope = ['openid', 'email']
+      c.Authenticator.admin_users = {
+          'helge.dzierzon@brockmann-consult.de'
+      }
+      c.Authenticator.auto_login = True
+
+auth:
+  whitelist:
+    users:
+      - dzelge
+      - forman
+      - AliceBalfanz
+      - pont-us
+      - TonioF
+      - bcdev
+  admin:
+    users:
+      - dzelge
+
+proxy:
+  secretToken: "7370a4c504e8837ab35fc1e8a6e030c7f6e18d2a64f837ed34ec97c9a5a447ec"
+  https:
+    enabled: true
+    type: offload
+    hosts:
+      - stage-lab.xcube-geodb.brockmann-consult.de
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-central-1:346516713328:certificate/72cfc830-a2ed-4b55-a6c5-3ffbcc24b9bb"
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+

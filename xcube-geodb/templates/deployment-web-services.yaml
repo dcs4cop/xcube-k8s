@@ -49,21 +49,21 @@ spec:
         {{- end }}
           imagePullPolicy: {{ $deployment.pullPolicy }}
           ports:
-            - name: http
+            - name: svc-{{ $deployment.name }}
               containerPort: {{ $deployment.port }}
               protocol: TCP
           {{ if $deployment.probes }}
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: svc-{{ $deployment.name }}
               httpHeaders:
                 - name: access
                   value: liveness
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: svc-{{ $deployment.name }}
               httpHeaders:
                 - name: access
                   value: liveness
