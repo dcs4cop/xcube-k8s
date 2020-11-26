@@ -1,0 +1,36 @@
+version: '{build}'
+
+image: Ubuntu
+
+environment:
+  # Disable Powershell on Linux machines
+  APPVEYOR_YML_DISABLE_PS_LINUX: "true"
+
+install:
+  - sh: sudo apt-get -y update;
+  - sh: sudo apt-get install  -y conntrack;
+  - sh: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+test_script:
+  - sh: cd xcube-gen
+  - sh: helm dependencies update
+  - sh: helm lint . -f tests/test-values.yaml
+  - sh: helm package -d ../charts .
+  - sh: cd ..
+  - sh: cd xcube-geodb
+  - sh: helm dependencies update
+  - sh: helm package -d ../charts .
+  - sh: cd ..
+
+deploy:
+  provider: S3
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  set_public: true
+  artifacts: charts
+  folder: charts
+  bucket: "dcfs-xcube-charts"
+  region: "eu-central-1"
+  on:
+    branch: master
+
