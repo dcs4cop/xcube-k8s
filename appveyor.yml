@@ -21,6 +21,7 @@ test_script:
   - sh: helm dependencies update
   - sh: helm package -d ../charts .
   - sh: cd ..
+  - sh: ls -al charts
 
 deploy:
   provider: S3
