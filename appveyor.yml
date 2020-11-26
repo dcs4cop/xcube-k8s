@@ -31,6 +31,4 @@ deploy:
   folder: charts
   bucket: "dcfs-xcube-charts"
   region: "eu-central-1"
-  on:
-    branch: master
 
