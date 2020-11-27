@@ -31,7 +31,7 @@ deploy:
     set_public: true
 #    set_content_type: true
     artifacts: charts/xcube*.tgz
-    folder: charts2
+    folder: charts
     bucket: "dcfs-xcube-charts"
     region: "eu-central-1"
 
