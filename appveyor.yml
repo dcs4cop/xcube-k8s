@@ -6,6 +6,11 @@ environment:
   # Disable Powershell on Linux machines
   APPVEYOR_YML_DISABLE_PS_LINUX: "true"
 
+configuration: Release
+
+artifacts:
+  - path: 'charts/*.tgz'
+
 install:
   - sh: sudo apt-get -y update;
   - sh: sudo apt-get install  -y conntrack;
@@ -19,6 +24,7 @@ test_script:
   - sh: cd ..
   - sh: cd xcube-geodb
   - sh: helm dependencies update
+  - sh: helm lint . -f tests/test-values.yaml
   - sh: helm package -d ../charts .
   - sh: cd ..
   - sh: ls -al charts
