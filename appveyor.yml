@@ -12,11 +12,11 @@ artifacts:
   - path: 'charts/*.tgz'
 
 install:
-  - sh: sudo apt-get -y update;
-  - sh: sudo apt-get install  -y conntrack;
   - sh: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
-test_script:
+build: false
+
+build_script:
   - sh: cd xcube-gen
   - sh: helm dependencies update
   - sh: helm lint . -f tests/test-values.yaml
@@ -33,4 +33,5 @@ test_script:
 deploy:
   - provider: Environment
     name: dcfs-xcube-charts
-
+    on:
+      APPVEYOR_REPO_TAG: true

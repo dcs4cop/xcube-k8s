@@ -3,6 +3,7 @@
 ## New Features
 
 - Added appveyor config
+- Removed .travis.yml
 - Added an lint test for geodb as well as xcube-gen
 - The geodb start an xcube-hub instance as well
 - The xcube-geodb configuration contains now a jupyterhub helm
