@@ -1,11 +1,8 @@
 *.iml
 .idea
 values.yaml
-values-minikube.yaml
-/xcube-gen/values-dev.yaml
-/xcube-geodb/values-stage.yaml
+values-stage.yaml
+values-dev.yaml
+values-ci.yaml
 /charts/
-/xcube-gen/values-stage.yaml
-/xcube-gen/store_config.json
-/xcube-gen/.cdsapirc
-/xcube-geodb/charts/
+/xcube-gen/cfgs/

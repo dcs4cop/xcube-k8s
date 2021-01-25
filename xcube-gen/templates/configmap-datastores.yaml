@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xcube-datapools-ci
+data:
+  data-pools.yaml: |-
+{{ .Files.Get "cfgs/data-pools.yaml" | indent 4 }}

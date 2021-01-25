@@ -14,6 +14,9 @@ spec:
             - name: xcube-gen-stores-pv
               persistentVolumeClaim:
                 claimName: xcube-gen-stores-pv
+            - name: xcube-datapools
+              configMap:
+                name: xcube-datapools
           containers:
             - name: xcube-gen
               image: {{ .Values.crontabContainer.repository }}
@@ -21,6 +24,9 @@ spec:
                 - name: xcube-gen-stores-pv
                   mountPath: /mnt/data-stores
                   readOnly: false
+                - name: xcube-datapools
+                  mountPath: "/etc/xcube"
+                  readOnly: true
               env:
               {{- range .Values.crontabContainer.env }}
                 - name: {{ .name }}
@@ -29,7 +35,7 @@ spec:
               args:
                 - /bin/bash
                 - -c
-                - echo "Start" && source activate xcube && xcube io dump -o /mnt/data-stores/data-stores.json && echo "End"
+                - echo "Start" && source activate xcube && xcube io dump -c /etc/xcube/data-pools.yaml -o /mnt/data-stores/data-stores.json && echo "End"
           restartPolicy: OnFailure
 
 ---
@@ -37,7 +43,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: xcube-gen-stores-pv
+  name: xcube-gen-stores-pv-ci
   annotations:
     pv.beta.kubernetes.io/gid: "100"
 spec:
@@ -54,7 +60,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: xcube-gen-stores-pv
+  name: xcube-gen-stores-pv-ci
 spec:
   resources:
     requests:

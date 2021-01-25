@@ -8,7 +8,7 @@ data:
   {{- end }}
 kind: ConfigMap
 metadata:
-  name: xcube-gen-redis-config
+  name: {{ include "xcube-gen.fullname" . }}-{{.Values.redisContainer.name}}-cfg
 
 ---
 
