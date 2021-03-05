@@ -1,3 +1,7 @@
+# Changes in Version 1.2.0
+
+
+
 # Changes in Version 1.1
 ## New Features
 - Added a configmap allowing data-pools to be configured to be used by

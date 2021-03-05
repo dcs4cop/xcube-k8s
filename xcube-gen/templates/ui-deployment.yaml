@@ -1,3 +1,4 @@
+{{ if .Values.uiContainer.create }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -80,3 +81,5 @@ spec:
       name: http
   selector:
   {{- include "xcube-gen.selectorLabels" . | nindent 4 }}
+
+{{ end }}

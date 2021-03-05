@@ -5,7 +5,7 @@ data:
   redis-config: |
     {{- range .Values.redisContainer.config }}
     {{ .name }} {{ .value }}
-  {{- end }}
+    {{- end }}
 kind: ConfigMap
 metadata:
   name: {{ include "xcube-gen.fullname" . }}-{{.Values.redisContainer.name}}-cfg
@@ -79,7 +79,7 @@ spec:
           emptyDir: {}
         - name: config
           configMap:
-            name: xcube-gen-redis-config
+            name: {{ include "xcube-gen.fullname" . }}-{{.Values.redisContainer.name}}-cfg
             items:
               - key: redis-config
                 path: redis.conf
