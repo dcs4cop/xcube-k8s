@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xcube-openapi
+data:
+  data-pools.yaml: |-
+{{ .Files.Get "cfgs/openapi.yaml" | indent 4 }}

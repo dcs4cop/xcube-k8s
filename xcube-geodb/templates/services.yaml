@@ -6,7 +6,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-{{ $deployment.name }}
+  name: svc-{{ $deployment.name }}
   labels:
     {{- include "xcube-geodb.labels" $root | nindent 4 }}
 spec:

@@ -1,6 +1,11 @@
 # Changes in Version 1.2.0
 
-
+- webapi: Added route /api/v2 to liveness and readiness probes
+- webapi: Added an initContainers config to enforce that the xcube-gen image is pulled properly prior to starting  teh service
+- ui: Allows now to configure whether the ui is actually started
+  -  all: simplied naming. Does not use helpers anymore
+- Removed the datastore cronjob. This is now handled by the webapi service itself dynamically on-the-fly
+- Changed the name of teh datapools configmap. Removed the suffix '-ci'
 
 # Changes in Version 1.1
 ## New Features
