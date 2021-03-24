@@ -31,7 +31,7 @@ entries:
       urls:
         - https://dcfs-xcube-charts.s3.eu-central-1.amazonaws.com/charts/xcube-gen-1.0.2.tgz
       version: 1.0.2
-    - created: 2020-03-05T15:30:11.139639398"
+    - created: "2020-03-05T15:30:11.139639398"
       description: "Deploy a K8s xcube gen infrastructure for an xcube gen service"
       digest:
       home: https://github.com/dcs4cop
