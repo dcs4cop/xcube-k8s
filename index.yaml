@@ -42,7 +42,7 @@ entries:
         - https://dcfs-xcube-charts.s3.eu-central-1.amazonaws.com/charts/xcube-gen-1.2.0.tgz
       version: 1.2.0
   xcube-geodb:
-    - created: "2020-09-22T20:16:59.139639398Z"
+    - created: "2020-09-22T20:16:59.139639398"
       description: "Deploy a K8s xcube geodb infrastructure for the xcube geodb version 0.1"
       digest:
       home: https://github.com/dcs4cop/xcube-geodb
@@ -62,7 +62,7 @@ entries:
       urls:
         - https://dcfs-xcube-charts.s3.eu-central-1.amazonaws.com/charts/xcube-geodb-0.1.4.tgz
       version: 0.1.4
-    - created: "2020-10-26T20:16:59.139639398Z"
+    - created: "2020-10-26T20:16:59.139639398"
       description: "Deploy a K8s xcube geodb infrastructure for the xcube geodb version 0.1"
       digest:
       home: https://github.com/dcs4cop/xcube-geodb
