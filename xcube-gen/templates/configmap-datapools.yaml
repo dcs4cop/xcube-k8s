@@ -5,3 +5,5 @@ metadata:
 data:
   data-pools.yaml: |-
 {{ .Files.Get "cfgs/data-pools.yaml" | indent 4 }}
+  stores-schema.json: |-
+{{ .Files.Get "cfgs/stores-schema.json" | indent 4 }}

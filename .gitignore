@@ -1,8 +1,6 @@
 *.iml
 .idea
-values.yaml
-values-stage.yaml
-values-dev.yaml
-values-ci.yaml
+values*.yaml
 /charts/
 /xcube-gen/cfgs/
+/xcube-geodb/cfg/
