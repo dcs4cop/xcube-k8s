@@ -17,28 +17,8 @@ spec:
       protocol: TCP
       name: svc-{{ $deployment.name }}
   selector:
-  {{- include "xcube-geodb.selectorLabels" $root | nindent 4 }}
+    app: {{ $deployment.name }}
 
 ---
 {{ end }}
 
-{{ range $i, $deployment := .Values.databases }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: service-{{ $deployment.name }}
-  labels:
-  {{- include "xcube-geodb.labels" $root | nindent 4 }}
-spec:
-  type: {{ $values.service.type }}
-  ports:
-    - port: {{ $deployment.port }}
-      targetPort: {{ $deployment.port }}
-      protocol: TCP
-      name: svc-{{ $deployment.name }}
-  selector:
-  {{- include "xcube-geodb.selectorLabels" $root | nindent 4 }}
-
----
-
-{{ end }}

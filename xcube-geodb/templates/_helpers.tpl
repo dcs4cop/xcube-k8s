@@ -36,19 +36,10 @@ Common labels
 */}}
 {{- define "xcube-geodb.labels" -}}
 helm.sh/chart: {{ include "xcube-geodb.chart" . }}
-{{ include "xcube-geodb.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Selector labels
-*/}}
-{{- define "xcube-geodb.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "xcube-geodb.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*

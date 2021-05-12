@@ -13,12 +13,12 @@ spec:
   replicas: {{ $deployment.replicaCount }}
   selector:
     matchLabels:
-      {{- include "xcube-geodb.selectorLabels" $root | nindent 6 }}
+      app: {{ $deployment.name }}
   template:
     metadata:
       labels:
         project: dcfs
-        {{- include "xcube-geodb.selectorLabels" $root | nindent 8 }}
+        app: {{ $deployment.name }}
     spec:
     {{- with $values.imagePullSecrets }}
       imagePullSecrets:
@@ -27,6 +27,8 @@ spec:
       serviceAccountName: {{ include "xcube-geodb.serviceAccountName" $root }}
       securityContext:
         {{- toYaml $values.podSecurityContext | nindent 8 }}
+      imagePullSecrets:
+        - name: bcdev-tu-bcdev-pull-secret
       containers:
         - name: {{ $deployment.name }}
           securityContext:
